@@ -1,0 +1,438 @@
+===== lastlook store horizon theme par kiya ==========================
+
+{%- style -%}
+  .ban-hero-section-{{ section.id }} {
+    /* Desktop Background Settings */
+    background-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+    background-repeat: no-repeat;
+    background-position: {{ section.settings.bg_pos_desktop }};
+    background-size: cover;
+    
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .ban-main-logo-img {
+    width: {{ section.settings.logo_width }}px;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+    display: inline-block;
+  }
+
+  .ban-headline-text {
+    font-size: 48px;
+    margin-bottom: 25px;
+    line-height: 1.2;
+    color: #F6BDCC;
+    font-weight: 600;
+  }
+
+  /* --- Seamless Slider Logic --- */
+  .ban-footer-wrapper {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    position: relative;
+    margin-top: 45px;
+    margin-bottom: 15px;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+
+  .ban-brands-footer {
+    display: flex;
+    width: max-content; 
+    align-items: center;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    animation: ban-marquee {{ section.settings.slider_speed }}s linear infinite;
+  }
+
+  .ban-brand-item {
+    flex-shrink: 0;
+    padding: 0 50px;
+  }
+
+  .ban-brand-item img {
+    height: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+    backface-visibility: hidden;
+  }
+
+  @keyframes ban-marquee {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-25%, 0, 0); } 
+  }
+
+  /* --- Mobile Responsive Settings --- */
+  @media (max-width: 767px) {
+    .ban-hero-section-{{ section.id }} {
+      {% if section.settings.bg_image_mobile != blank %}
+        background-image: url('{{ section.settings.bg_image_mobile | image_url: width: 800 }}');
+      {% endif %}
+      background-position: {{ section.settings.bg_pos_mobile }};
+      
+      padding-top: {{ section.settings.padding_top | divided_by: 2 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | divided_by: 2 }}px;
+      padding-inline: 12px;
+    }
+
+    .ban-headline-text { font-size: 30px; margin-bottom: 0; }
+    .ban-brand-item { padding: 0 25px; }
+    .ban-footer-wrapper { margin-top: 10px; }
+    .ban-form-container { width: 100%; }
+    .ban-main-logo-img { margin-bottom: 20px; }
+  }
+{%- endstyle -%}
+
+<section class="ban-hero-section-{{ section.id }}">
+  {% if section.settings.main_logo %}
+    <img src="{{ section.settings.main_logo | image_url: width: 1500 }}" class="ban-main-logo-img" alt="Main Logo">
+  {% endif %}
+
+  <div class="ban-headline-text">{{ section.settings.headline }}</div>
+
+  <div class="ban-form-container">
+    {% render 'custom-lastlook-form' %}
+  </div>
+
+  <div class="ban-footer-wrapper">
+    <div class="ban-brands-footer">
+      {% capture logo_set %}
+        {% for block in section.blocks %}
+          <div class="ban-brand-item" {{ block.shopify_attributes }}>
+            {% if block.settings.brand_img %}
+              <style>
+                .ban-img-{{ block.id }} { width: {{ block.settings.brand_width }}px !important; }
+                @media (max-width: 767px) {
+                  .ban-img-{{ block.id }} { width: {{ block.settings.brand_width_mobile }}px !important; }
+                }
+              </style>
+              <img src="{{ block.settings.brand_img | image_url: width: 400 }}" 
+                   alt="Brand logo" 
+                   class="ban-img-{{ block.id }}">
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endcapture %}
+
+      {{ logo_set }}{{ logo_set }}{{ logo_set }}{{ logo_set }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ban Last Look Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Desktop Background Image"
+    },
+    {
+      "type": "select",
+      "id": "bg_pos_desktop",
+      "label": "Desktop Image Position",
+      "options": [
+        { "value": "top center", "label": "Top" },
+        { "value": "center center", "label": "Center" },
+        { "value": "bottom center", "label": "Bottom" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_mobile",
+      "label": "Mobile Background Image"
+    },
+    {
+      "type": "select",
+      "id": "bg_pos_mobile",
+      "label": "Mobile Image Position",
+      "options": [
+        { "value": "top center", "label": "Top" },
+        { "value": "center center", "label": "Center" },
+        { "value": "bottom center", "label": "Bottom" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Top Padding (Desktop)",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom Padding (Desktop)",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "slider_speed",
+      "min": 5,
+      "max": 100,
+      "step": 1,
+      "unit": "s",
+      "label": "Slider Speed",
+      "default": 30
+    },
+    {
+      "type": "image_picker",
+      "id": "main_logo",
+      "label": "Top Main Logo"
+    },
+    {
+      "type": "number",
+      "id": "logo_width",
+      "label": "Main Logo Width (in px)",
+      "default": 800
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline Text",
+      "default": "Australia’s First Online Warehouse Sale for Quality Brands"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "brand_img",
+          "label": "Brand Logo Image"
+        },
+        {
+          "type": "number",
+          "id": "brand_width",
+          "label": "Desktop Logo Width",
+          "default": 120
+        },
+        {
+          "type": "number",
+          "id": "brand_width_mobile",
+          "label": "Mobile Logo Width",
+          "default": 80
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ban Last Look Hero"
+    }
+  ]
+}
+{% endschema %}
+
+
+
+================== form ke liye snnipet add karo  {% render 'custom-lastlook-form' %} =======================================
+
+{% comment %}
+  Custom Shopify Form Snippet for Horizon Theme - Updated Design
+{% endcomment %}
+
+<div class="ll-form-wrapper">
+  <div class="ll-form-container">
+    <h3 class="ll-form-heading">Get on the list.</h3>
+    
+    {%- form 'customer', id: 'LastLookContactForm', class: 'll-shopify-form' -%}
+      
+      {%- if form.posted_successfully? -%}
+        <div class="ll-success-message">
+          <p>Success! You're on the list.</p>
+        </div>
+      {%- else -%}
+        
+        {%- if form.errors -%}
+          <div class="ll-error-message">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="ll-input-row">
+          <input 
+            type="text" 
+            name="contact[first_name]" 
+            id="ll-name" 
+            placeholder="Name" 
+            required
+          >
+        </div>
+
+        <div class="ll-input-inline-group">
+          <input 
+            type="email" 
+            name="contact[email]" 
+            id="ll-email" 
+            placeholder="Email" 
+            required
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+          >
+          <button type="submit" class="ll-submit-btn">
+            Unlock My Pass
+          </button>
+        </div>
+
+        <input type="hidden" name="contact[tags]" value="newsletter, lastlook_warehouse_sale">
+      {%- endif -%}
+      
+    {%- endform -%}
+  </div>
+</div>
+
+<style>
+  .ll-form-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: transparent;
+  }
+
+  .ll-form-container {
+    max-width: 600px;
+    width: 100%;
+    padding: 25px 70px;
+    border: 2px solid #F88FAB;
+    border-radius: 40px;
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    text-align: center;
+    color: #44172B;
+  }
+
+  .ll-form-heading {
+    font-size: 56px;
+    font-weight: 400;
+    margin-bottom: 25px;
+    color: #F6BDCC;
+    letter-spacing: -1px;
+  }
+
+  /* Shared Styling for Rows */
+  .ll-input-row, .ll-input-inline-group {
+    border: 1px solid #F6BDCC;
+    border-radius: 20px; /* Rounded corners as per image */
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    overflow: hidden; /* Taaki button border ke bahar na jaye */
+  }
+
+  /* Input internal styling */
+  .ll-shopify-form input {
+    width: 100%;
+    background: transparent;
+    border: none; /* Border ab container par hai */
+    padding: 18px 25px;
+    color: #F6BDCC;
+    font-size: 18px;
+    font-weight: 600;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .ll-shopify-form input::placeholder {
+    color: #F6BDCC;
+    opacity: 0.9;
+  }
+
+  /* Button inside the group */
+  .ll-submit-btn {
+    background-color: #F88FAB; 
+    color: #000;
+    border: none;
+    padding: 15px 10px;
+    margin-right: 10px; /* Border ke andar thoda gap */
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+  }
+
+  {% comment %} .ll-submit-btn:hover {
+    background-color: #f6bdcc;
+    transform: scale(1.02);
+  } {% endcomment %}
+
+  /* Mobile Fixes */
+  @media screen and (max-width: 768px) {
+    .ll-shopify-form input {
+      font-size: 10px;
+      padding: 12px 15px;
+    }
+    .ll-form-container {
+      padding: 20px 40px;
+      border-radius: 17px;
+    }
+    .ll-input-inline-group {
+      border: 1px solid #F6BDCC;
+      border-radius: 8px;
+      flex-direction: row;
+      gap: 0px;
+    }
+    .ll-input-inline-group input, .ll-input-row {
+       border-radius: 8px;
+       font-size: 10px;
+       font-weight: 700;
+    }
+    .ll-submit-btn {
+      margin-right: 5px;
+      padding: 10px 8px;
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 8px;
+    }
+    .ll-form-heading {
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+    .ll-form-wrapper {
+      max-width: 90%;
+      margin: auto;
+    }
+  }
+</style>

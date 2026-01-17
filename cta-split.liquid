@@ -1,0 +1,200 @@
+===== Lastlook store horizon theme mein ========================
+
+{%- style -%}
+  .cta-split-banner-{{ section.id }} {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    border: 1px solid #fff;
+  }
+
+  .cta-banner-column {
+    flex: 1;
+    min-width: 300px;
+    padding: 40px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  .cta-banner-text-content {
+    display: flex;
+    flex-direction: column;
+    padding-right: 20px;
+  }
+
+  .cta-banner-title {
+    margin: 0;
+    font-size: 55px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .cta-banner-subtitle {
+    margin: 0;
+    font-size: 25px;
+    opacity: 0.9;
+  }
+
+  .cta-banner-icon-wrapper {
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .cta-banner-icon {
+    width: 68px;
+    height: 63px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cta-banner-column {
+    border: 3px solid #fff;
+  }
+
+  @media screen and (max-width: 767px) {
+    .cta-split-banner-{{ section.id }} { 
+      flex-direction: column-reverse;
+    }
+    .cta-banner-title {
+      font-size: 33px;
+    }
+
+    .cta-banner-column {
+      padding: 30px 20px;
+    }
+
+    .cta-banner-subtitle {
+      font-size: 15px;
+    }
+
+    .cta-banner-icon {
+      width: 55px;
+      height: 50px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="cta-split-banner-{{ section.id }}">
+  <div class="cta-banner-column" style="background-color: {{ section.settings.bg_1 }}; color: {{ section.settings.text_1 }};">
+    
+    <div class="cta-banner-text-content">
+      <h2 class="cta-banner-title" style="color: {{ section.settings.text_1 }};">
+        {{ section.settings.title_1 }}
+      </h2>
+      <p class="cta-banner-subtitle">
+        {{ section.settings.subtitle_1 }}
+      </p>
+    </div>
+
+    <a href="{{ section.settings.link_1 }}" class="cta-banner-icon-wrapper">
+      <div class="cta-banner-icon" style="background-color: #F88FAB;">
+        <svg width="23" height="39" viewBox="0 0 23 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.98524 38.0607C10.571 38.6464 11.5208 38.6464 12.1066 38.0607L21.6525 28.5147C22.2383 27.9289 22.2383 26.9792 21.6525 26.3934C21.0667 25.8076 20.117 25.8076 19.5312 26.3934L11.0459 34.8787L2.56062 26.3934C1.97483 25.8076 1.02508 25.8076 0.439297 26.3934C-0.14649 26.9792 -0.14649 27.9289 0.439297 28.5147L9.98524 38.0607ZM11.0459 0L9.5459 0L9.5459 37H11.0459H12.5459L12.5459 0L11.0459 0Z" fill="#44172B"/>
+        </svg>
+      </div>
+    </a>
+  </div>
+
+  <div class="cta-banner-column" style="background-color: {{ section.settings.bg_2 }}; color: {{ section.settings.text_2 }};">
+    
+    <div class="cta-banner-text-content">
+      <h2 class="cta-banner-title" style="color: {{ section.settings.text_2 }};">
+        {{ section.settings.title_2 }}
+      </h2>
+      <p class="cta-banner-subtitle">
+        {{ section.settings.subtitle_2 }}
+      </p>
+    </div>
+
+    <a href="{{ section.settings.link_2 }}" class="cta-banner-icon-wrapper">
+      <div class="cta-banner-icon" style="background-color: #44172B;">
+        <svg width="39" height="23" viewBox="0 0 39 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M38.0607 12.1066C38.6464 11.5208 38.6464 10.571 38.0607 9.98524L28.5147 0.439297C27.9289 -0.14649 26.9792 -0.14649 26.3934 0.439297C25.8076 1.02508 25.8076 1.97483 26.3934 2.56062L34.8787 11.0459L26.3934 19.5312C25.8076 20.117 25.8076 21.0667 26.3934 21.6525C26.9792 22.2383 27.9289 22.2383 28.5147 21.6525L38.0607 12.1066ZM0 11.0459L0 12.5459H37V11.0459V9.5459H0L0 11.0459Z" fill="#F88FAB"/>
+        </svg>
+      </div>
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Split CTA Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Left Column (Shoppers)"
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title",
+      "default": "For Shoppers"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_1",
+      "label": "Subtitle",
+      "default": "Shop a warehouse sale, from bed"
+    },
+    {
+      "type": "url",
+      "id": "link_1",
+      "label": "Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_1",
+      "label": "Background Color",
+      "default": "#3d1a2a"
+    },
+    {
+      "type": "color",
+      "id": "text_1",
+      "label": "Text Color",
+      "default": "#f9a1b6"
+    },
+    {
+      "type": "header",
+      "content": "Right Column (Brands)"
+    },
+    {
+      "type": "text",
+      "id": "title_2",
+      "label": "Title",
+      "default": "For Brands"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_2",
+      "label": "Subtitle",
+      "default": "Clear stock and enhance your brand"
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": "Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_2",
+      "label": "Background Color",
+      "default": "#f99fb5"
+    },
+    {
+      "type": "color",
+      "id": "text_2",
+      "label": "Text Color",
+      "default": "#3d1a2a"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split CTA Banner"
+    }
+  ]
+}
+{% endschema %}

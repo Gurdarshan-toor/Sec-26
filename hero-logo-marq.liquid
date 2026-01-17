@@ -1,0 +1,316 @@
+======== lastlook store par use kiya ====================
+
+{%- style -%}
+  .brand-hero-section-{{ section.id }} {
+    {% if section.settings.bg_image != blank %}
+      background: url('{{ section.settings.bg_image | image_url: width: 2000 }}') no-repeat center center;
+      background-size: cover;
+    {% else %}
+      background-color: {{ section.settings.bg_color }};
+    {% endif %}
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  .brand-hero-section-{{ section.id }}::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: {{ section.settings.bg_color | color_modify: 'alpha', 0.4 }};
+    z-index: 1;
+  }
+
+  .brand-content-wrapper {
+    position: relative;
+    z-index: 2;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .brand-main-logo-img {
+    width: {{ section.settings.logo_width }}px !important; 
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 25px;
+    display: block;
+  }
+
+  .brand-headline-text {
+    font-size: 40px;
+    margin-bottom: 40px;
+    line-height: 1.2;
+    color: {{ section.settings.text_color_accent }};
+    font-weight: 700;
+  }
+
+  .brand-subtext {
+    font-size: 35px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    max-width: 950px;
+    line-height: 1.2;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: #F6BDCC;
+  }
+
+  .brand-cta-button {
+    display: inline-block;
+    background-color: {{ section.settings.btn_bg_color }};
+    color: {{ section.settings.btn_text_color }};
+    padding: 16px 50px;
+    font-size: 35px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .brand-small-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #F6BDCC;
+    display: block;
+    opacity: 0.85;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  /* --- Marquee Logic --- */
+  .brand-footer-wrapper {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    margin-top: 35px;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  }
+
+  .brand-brands-footer {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: brand-marquee {{ section.settings.slider_speed }}s linear infinite;
+  }
+
+  .brand-brand-item {
+    flex-shrink: 0;
+    padding: 0 45px;
+  }
+
+  .brand-brand-item img {
+    height: auto;
+    filter: brightness(0) invert(1);
+  }
+
+  /* Block level dynamic width for logos */
+  {% for block in section.blocks %}
+    .brand-img-{{ block.id }} {
+      width: {{ block.settings.brand_width }}px !important;
+    }
+  {% endfor %}
+
+  @keyframes brand-marquee {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-25%, 0, 0); }
+  }
+
+  @media (max-width: 767px) {
+    .brand-hero-section-{{ section.id }} { padding-top: 10px; padding-inline: 10px; }
+    .brand-main-logo-img { width: 100% !important; }
+    .brand-headline-text { font-size: 22px; margin-bottom: 30px; }
+    .brand-subtext { font-size: 22px; margin-bottom: 25px; order: 4; }
+    .brand-cta-button { font-size: 20px; padding: 14px 35px; margin-bottom: 30px; }
+    .brand-small-text { display: none; }
+    .brand-footer-wrapper { margin-top: 10px; }
+    /* Mobile specific logo widths from blocks */
+    {% for block in section.blocks %}
+      .brand-img-{{ block.id }} {
+        width: {{ block.settings.brand_width_mobile }}px !important;
+      }
+    {% endfor %}
+    
+    .brand-brand-item { padding: 0 25px; }
+  }
+{%- endstyle -%}
+
+<section class="brand-hero-section-{{ section.id }}">
+  <div class="brand-content-wrapper">
+    {% if section.settings.main_logo %}
+      <img src="{{ section.settings.main_logo | image_url: width: 1500 }}" class="brand-main-logo-img" alt="Main Logo">
+    {% endif %}
+
+    <div class="brand-headline-text">{{ section.settings.headline }}</div>
+    <div class="brand-subtext">{{ section.settings.sub_headline }}</div>
+
+    {% if section.settings.button_label != blank %}
+      <a href="{{ section.settings.button_link }}" class="brand-cta-button">{{ section.settings.button_label }}</a>
+    {% endif %}
+
+    {% if section.settings.small_text != blank %}
+      <span class="brand-small-text">{{ section.settings.small_text }}</span>
+    {% endif %}
+  </div>
+
+  <div class="brand-footer-wrapper">
+    <div class="brand-brands-footer">
+      {% capture logo_set %}
+        {% for block in section.blocks %}
+          <div class="brand-brand-item" {{ block.shopify_attributes }}>
+            {% if block.settings.brand_img %}
+              <img src="{{ block.settings.brand_img | image_url: width: 400 }}" 
+                   alt="Brand logo" 
+                   class="brand-img-{{ block.id }}">
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endcapture %}
+
+      {{ logo_set }}{{ logo_set }}{{ logo_set }}{{ logo_set }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Hero Section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#3d1a24"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "number",
+      "id": "logo_width",
+      "label": "Main Logo Width (px)",
+      "default": 800
+    },
+    {
+      "type": "image_picker",
+      "id": "main_logo",
+      "label": "Main Top Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline Text",
+      "default": "Australia’s first Online Warehouse Sale for Quality Brands"
+    },
+    {
+      "type": "color",
+      "id": "text_color_accent",
+      "label": "Headline Color",
+      "default": "#F6BDCC"
+    },
+    {
+      "type": "textarea",
+      "id": "sub_headline",
+      "label": "Sub-headline Text",
+      "default": "We’ll help you clear excess stock; discreetly, quickly and without damaging your brand image."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Let's Chat"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button BG Color",
+      "default": "#f194ab"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "small_text",
+      "label": "Small Caption Text",
+      "default": "Book in a 20 minute discovery call"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0, "max": 200, "step": 10, "unit": "px",
+      "label": "Top Padding", "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0, "max": 200, "step": 10, "unit": "px",
+      "label": "Bottom Padding", "default": 80
+    },
+    {
+      "type": "range",
+      "id": "slider_speed",
+      "min": 5, "max": 100, "step": 1, "unit": "s",
+      "label": "Slider Speed", "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "brand_img",
+          "label": "Brand Logo"
+        },
+        {
+          "type": "number",
+          "id": "brand_width",
+          "label": "Desktop Logo Width (px)",
+          "default": 120
+        },
+        {
+          "type": "number",
+          "id": "brand_width_mobile",
+          "label": "Mobile Logo Width (px)",
+          "default": 80
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Hero Section"
+    }
+  ]
+}
+{% endschema %}

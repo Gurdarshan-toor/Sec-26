@@ -1,0 +1,279 @@
+======== lastlook store par use kiya =======
+
+{%- style -%}
+  .ph-brand-feature-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding: 50px 20px 20px 20px;
+    position: relative;
+    overflow: hidden;
+    color: {{ section.settings.text_color }};
+    font-family: sans-serif;
+  }
+
+  .ph-brand-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Floating Icon Position Logic */
+  .ph-floating-icon-{{ section.id }} {
+    position: absolute;
+    width: {{ section.settings.icon_width }}px;
+    top: {{ section.settings.icon_top }}%;
+    bottom: {{ section.settings.icon_bottom }}%;
+    left: {{ section.settings.icon_left }}%;
+    right: {{ section.settings.icon_right }}%;
+    z-index: 10;
+  }
+
+  .ph-left-column {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+  }
+
+  .ph-left-column h2 {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    line-height: 1.1;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ph-phone-mockup {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ph-phone-mockup img {
+    max-width: 250px;
+    height: auto;
+    transform: rotate(-5deg);
+  }
+
+  .ph-right-column {
+    flex: 1;
+    min-width: 350px;
+    padding-left: 50px;
+  }
+
+  .ph-feature-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .ph-feature-icon {
+    width: 60px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .ph-feature-content h3 {
+    margin: 0 0 2px 0;
+    font-size: 35px;
+    font-weight: 700;
+  }
+
+  .ph-feature-content p {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 768px) {
+    .ph-right-column { padding-left: 0; margin-top: 0px; }
+    .ph-brand-feature-{{ section.id }} { text-align: center; }
+    .ph-feature-item { flex-direction: column; align-items: center; text-align: center; }
+    .ph-feature-icon { margin-right: 0; margin-bottom: 15px; }
+    .ph-brand-container { flex-direction: column-reverse; }
+     .ph-brand-feature-{{ section.id }} { 
+        position: relative;
+        padding-top: 115px;
+     }
+     .ph-left-column h2 {
+        position: absolute;
+        top: 4%;
+        left: 6%;
+        transform: translate(0%, -6%);
+        font-size: 25px;
+        font-weight: 600;
+        max-width: 380px;
+     }
+     .ph-floating-icon-{{ section.id }} {
+        top: 1%;
+        left: 86%;
+     }
+     .ph-feature-content h3 {
+        font-size: 25px;
+     }
+     .ph-feature-content p {
+        font-size: 20px;
+        max-width: 380px;
+        margin-top: 10px;
+     }
+  }
+{%- endstyle -%}
+
+<section class="ph-brand-feature-{{ section.id }}">
+  {% if section.settings.floating_icon != blank %}
+    <div class="ph-floating-icon-{{ section.id }}">
+      <img src="{{ section.settings.floating_icon | image_url: width: 100 }}" alt="icon" style="width: 100%;">
+    </div>
+  {% endif %}
+
+  <div class="ph-brand-container">
+    <div class="ph-left-column">
+      <h2>{{ section.settings.main_heading }}</h2>
+      <div class="ph-phone-mockup">
+        {% if section.settings.phone_image != blank %}
+          <img src="{{ section.settings.phone_image | image_url: width: 600 }}" alt="Phone Mockup">
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ph-right-column">
+      {% for block in section.blocks %}
+        <div class="ph-feature-item" {{ block.shopify_attributes }}>
+          <div class="ph-feature-icon">
+            {% if block.settings.item_icon != blank %}
+              <img src="{{ block.settings.item_icon | image_url: width: 100 }}" alt="icon" style="width: 100%;">
+            {% endif %}
+          </div>
+          <div class="ph-feature-content">
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Feature Section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f582ae"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#2b0d1a"
+    },
+    {
+      "type": "header",
+      "content": "Main Content"
+    },
+    {
+      "type": "textarea",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Clear more stock and enhance your brand image."
+    },
+    {
+      "type": "image_picker",
+      "id": "phone_image",
+      "label": "Phone Mockup Image"
+    },
+    {
+      "type": "header",
+      "content": "Floating Icon Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "floating_icon",
+      "label": "Top Floating Icon"
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "label": "Icon Width (px)",
+      "min": 20,
+      "max": 150,
+      "step": 5,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_top",
+      "label": "Position: Top (%)",
+      "min": 0,
+      "max": 100,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "icon_bottom",
+      "label": "Position: Bottom (%) - Overrides Top",
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "icon_left",
+      "label": "Position: Left (%)",
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "icon_right",
+      "label": "Position: Right (%)",
+      "min": 0,
+      "max": 100,
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "item_icon",
+          "label": "Feature Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Drive More Growth"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Realise revenue on otherwise stagnant inventory."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Feature Section",
+      "blocks": [
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,237 @@
+==== lastlook store horizon theme par form use kiya gya ================
+
+  <section class="custom-contact-section" id="section-{{ section.id }}">
+  <div class="page-width">
+    
+    <div class="form-icon-container">
+      {%- if section.settings.icon_image != blank -%}
+        <img src="{{ section.settings.icon_image | image_url: width: 200 }}" 
+             alt="Custom Icon" 
+             style="width: {{ section.settings.icon_size }}px; height: auto;">
+      {%- else -%}
+        <svg width="{{ section.settings.icon_size }}" height="{{ section.settings.icon_size }}" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V12C14.017 12.5523 13.5693 13 13.017 13H11.017C10.4647 13 10.017 12.5523 10.017 12V9C10.017 7.34315 11.3601 6 13.017 6H19.017C20.6738 6 22.017 7.34315 22.017 9V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM3.01697 21L3.01697 18C3.01697 16.8954 3.9124 16 5.01697 16H8.01697C8.56925 16 9.01697 15.5523 9.01697 15V9C9.01697 8.44772 8.56925 8 8.01697 8H4.01697C3.46468 8 3.01697 8.44772 3.01697 9V12C3.01697 12.5523 2.56925 13 2.01697 13H0.0169678C-0.535317 13 -0.983032 12.5523 -0.983032 12V9C-0.983032 7.34315 0.360113 6 2.01697 6H8.01697C9.67382 6 11.017 7.34315 11.017 9V15C11.017 18.3137 8.33068 21 5.01697 21H3.01697Z" />
+        </svg>
+      {%- endif -%}
+    </div>
+
+    <div class="contact-header">
+      <h2 class="form-title">{{ section.settings.title }}</h2>
+      <p class="form-subtitle">{{ section.settings.subtitle }}</p>
+    </div>
+
+    <div class="contact-form-container">
+      {%- form 'contact', id: 'ContactForm' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="form-success">Success! We'll get back to you soon.</p>
+        {%- endif -%}
+
+        <div class="field-wrapper">
+          <input type="text" name="contact[name]" class="field__input" placeholder="Name" required>
+        </div>
+
+        <div class="field-wrapper">
+          <input type="email" name="contact[email]" class="field__input" placeholder="Email" required>
+        </div>
+
+        <div class="field-wrapper">
+          <textarea rows="5" name="contact[body]" class="field__input" placeholder="Message" required></textarea>
+        </div>
+
+        <div class="button-center">
+           <button type="submit" class="custom-submit-btn">Submit</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .custom-contact-section {
+    background-color: {{ section.settings.bg_color }};
+    padding: 40px 0 40px 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .form-icon-container {
+    position: absolute;
+    top: {{ section.settings.icon_top }}px;
+    right: {{ section.settings.icon_right }}px;
+    color: {{ section.settings.icon_color }};
+    z-index: 10;
+    line-height: 0;
+  }
+
+  .form-icon-container img {
+    display: block;
+    object-fit: contain;
+  }
+
+  .form-title {
+    font-size: 45px;
+    font-weight: 700;
+    margin: 0;
+    color: #44172B;
+  }
+
+  .form-subtitle {
+    font-size: 30px;
+    color: #44172B;
+  }
+  .contact-header {
+    margin-bottom: 30px;
+  }
+
+  .contact-form-container {
+    background-color: {{ section.settings.form_bg_color }};
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    border-radius: 31px;
+    border: 2px solid #44172B;
+    position: relative;
+    z-index: 5;
+  }
+
+  .field-wrapper {
+    margin-bottom: 15px;
+  }
+
+  .field__input {
+    width: 100%;
+    background: transparent !important;
+    border: 1px solid #F6BDCC !important;
+    border-radius: 16px !important;
+    padding: 15px 20px !important;
+    color: #44172B !important;
+    font-size: 16px;
+    box-shadow: none;
+  }
+
+  .field__input::placeholder {
+    color: #F6BDCC;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .custom-submit-btn {
+    background: #F88FAB !important;
+    color: #44172B !important;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+  }
+ .field__input:is(:focus,:hover) {
+    box-shadow: none !important;
+  }
+  @media screen and (max-width: 767px) {
+    .form-icon-container {
+      top: 15px;
+      right: 15px;
+      transform: scale(0.8);
+    }
+    .contact-form-container {
+      margin: 0 30px;
+    }
+    .form-title {
+      font-size: 35px;
+    }
+    .form-subtitle {
+      font-size: 25px;
+    }
+    .field__input {
+      border-radius: 8px !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Contact + Icon Settings",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text & Colors"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Wanna Chat?"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sub-heading",
+      "default": "Send us a message :)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Page Background",
+      "default": "#f587a8"
+    },
+    {
+      "type": "color",
+      "id": "form_bg_color",
+      "label": "Form Box Background",
+      "default": "#b0667a"
+    },
+    {
+      "type": "header",
+      "content": "Icon / Image Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_image",
+      "label": "Custom Icon Image (Optional)"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "SVG Icon Color (if no image)",
+      "default": "#2a2a2a"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 20,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon/Image Size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_top",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "Position: Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_right",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "Position: Right",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact + Icon Settings"
+    }
+  ]
+}
+{% endschema %}

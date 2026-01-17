@@ -1,0 +1,246 @@
+======= lastlook store par ====================
+
+{%- style -%}
+  .fq-wrapper-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    Padding: 50px 20px 30px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .fq-header {
+    text-align: center;
+    color: {{ section.settings.text_color }};
+    font-size: 45px;
+    font-weight: 600;
+    margin-bottom: 40px;
+    letter-spacing: -0.5px;
+  }
+  .fq-icon-img {
+    position: absolute;
+    width: {{ section.settings.icon_width }}px;
+    top: {{ section.settings.icon_top }}%;
+    right: {{ section.settings.icon_right }}%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .fq-item {
+    background-color: {{ section.settings.item_bg_color }};
+    border-radius: 15px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  /* .fq-item:hover {
+    transform: translateY(-2px);
+  } */
+  .fq-question-box {
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+    font-weight: 600;
+    color: {{ section.settings.q_text_color }};
+  }
+  .fq-answer-box {
+    padding: 0 25px 20px;
+    display: none;
+    color: {{ section.settings.q_text_color }};
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .fq-arrow {
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+  .fq-item.is-active .fq-arrow {
+    transform: rotate(180deg);
+  }
+  .fq-arrow svg {
+    width: 37px;
+    height: 37px;
+  }
+  @media only screen and (max-width: 767px) {
+     .fq-wrapper-{{ section.id }} { 
+        padding-bottom: 20px;
+     }
+    .fq-header {
+        font-size: 35px;
+    }
+    .fq-icon-img {
+        top: 3%;
+    }
+    .fq-question-box {
+        font-size: 15px;
+    }
+    .fq-header {
+        margin-bottom: 25px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="fq-wrapper-{{ section.id }}">
+  {% if section.settings.top_icon != blank %}
+    <img src="{{ section.settings.top_icon | image_url: width: 150 }}" 
+         class="fq-icon-img" 
+         alt="FAQ decorative icon">
+  {% endif %}
+
+  <div class="fq-container">
+    <h2 class="fq-header">{{ section.settings.heading }}</h2>
+
+    {% for block in section.blocks %}
+      <div class="fq-item" {{ block.shopify_attributes }} onclick="toggleFaq(this)">
+        <div class="fq-question-box">
+          <span>{{ block.settings.question }}</span>
+          <span class="fq-arrow">
+            <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32.8893 18.5C32.8893 14.6837 31.3733 11.0237 28.6748 8.32523C25.9763 5.62671 22.3163 4.1107 18.5 4.1107C14.6837 4.1107 11.0237 5.62671 8.32523 8.32523C5.62671 11.0237 4.1107 14.6837 4.1107 18.5C4.1107 22.3163 5.62671 25.9763 8.32523 28.6748C11.0237 31.3733 14.6837 32.8893 18.5 32.8893C22.3163 32.8893 25.9763 31.3733 28.6748 28.6748C31.3733 25.9763 32.8893 22.3163 32.8893 18.5ZM23.2138 13.9638C23.4045 13.7731 23.6309 13.6218 23.8801 13.5186C24.1293 13.4154 24.3963 13.3623 24.6661 13.3623C24.9358 13.3623 25.2028 13.4154 25.452 13.5186C25.7012 13.6218 25.9276 13.7731 26.1183 13.9638C26.309 14.1545 26.4603 14.3809 26.5635 14.6301C26.6667 14.8793 26.7198 15.1463 26.7198 15.4161C26.7198 15.6858 26.6667 15.9528 26.5635 16.202C26.4603 16.4512 26.309 16.6776 26.1183 16.8683L19.9541 23.0362C19.7633 23.2275 19.5367 23.3793 19.2872 23.4828C19.0377 23.5864 18.7702 23.6397 18.5 23.6397C18.2298 23.6397 17.9623 23.5864 17.7128 23.4828C17.4633 23.3793 17.2367 23.2275 17.0459 23.0362L10.8799 16.872L10.7393 16.7148C10.4148 16.3207 10.2488 15.8199 10.2735 15.3101C10.2983 14.8002 10.512 14.3179 10.8731 13.9571C11.2341 13.5963 11.7166 13.3829 12.2264 13.3584C12.7363 13.334 13.2369 13.5004 13.6308 13.825L13.7862 13.9657L18.5 18.6758L23.2138 13.9638ZM37 18.5C37 28.7175 28.7175 37 18.5 37C8.28245 37 0 28.7175 0 18.5C0 8.28245 8.28245 0 18.5 0C28.7175 0 37 8.28245 37 18.5Z" fill="#44172B" fill-opacity="0.52"/>
+            </svg>
+          </span>
+        </div>
+        <div class="fq-answer-box">
+          {{ block.settings.answer }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  function toggleFaq(element) {
+    const answer = element.querySelector('.fq-answer-box');
+    const isActive = element.classList.contains('is-active');
+    
+    // Close all other FAQ items
+    document.querySelectorAll('.fq-item').forEach(item => {
+      item.classList.remove('is-active');
+      item.querySelector('.fq-answer-box').style.display = 'none';
+    });
+
+    // Toggle current item
+    if (!isActive) {
+      element.classList.add('is-active');
+      answer.style.display = 'block';
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "FQ Custom Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Main Background",
+      "default": "#3d1321"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Heading Color",
+      "default": "#ff9eb5"
+    },
+    {
+      "type": "color",
+      "id": "item_bg_color",
+      "label": "FAQ Item Background",
+      "default": "#f18ba3"
+    },
+    {
+      "type": "color",
+      "id": "q_text_color",
+      "label": "Question/Answer Color",
+      "default": "#3d1321"
+    },
+    {
+      "type": "header",
+      "content": "Floating Icon Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_icon",
+      "label": "Decorative Icon"
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "min": 10,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon Width",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "icon_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Top Position",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "icon_right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Right Position",
+      "default": 10
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_block",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is LASTLOOK?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Add your detailed answer here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FQ Custom FAQ",
+      "blocks": [
+        { "type": "faq_block" },
+        { "type": "faq_block" },
+        { "type": "faq_block" }
+      ]
+    }
+  ]
+}
+{% endschema %}

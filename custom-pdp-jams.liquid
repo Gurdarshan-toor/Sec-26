@@ -1,0 +1,338 @@
+========== jambyjoshcle.com store down theme par use kiya gya ========================
+
+
+  {%- assign product = all_products[section.settings.featured_product] -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+{%- if product != blank -%}
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+{%- assign img_count = 0 -%}
+{%- for variant in product.variants -%}
+  {%- if variant.featured_image != blank -%}{%- assign img_count = img_count | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+
+<section class="josh-v5-wrapper" id="Section-{{ section.id }}" style="background-color: {{ section.settings.bg_color }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;">
+  <div class="josh-grid-layout {% if section.settings.enable_sticky %}is-sticky-on{% endif %}">
+    
+    <div class="josh-media-col">
+      <div class="josh-sticky-wrap">
+        {% if section.settings.show_badge %}
+          <div class="josh-badge-dynamic" style="{% if section.settings.v_pos == 'top' %} top: {{ section.settings.badge_top }}%; {% else %} bottom: {{ section.settings.badge_bottom }}%; {% endif %} {% if section.settings.h_pos == 'left' %} left: {{ section.settings.badge_left }}%; {% else %} right: {{ section.settings.badge_right }}%; {% endif %} width: {{ section.settings.badge_size }}px;">
+            {% if section.settings.badge_shape != blank %}
+              <img src="{{ section.settings.badge_shape | img_url: '400x' }}" class="badge-bg-img" alt="badge">
+            {% endif %}
+            <span class="badge-text-figma" style="font-size: {{ section.settings.badge_font_size }}px; transform: translate({{ section.settings.text_x_offset }}%, {{ section.settings.text_y_offset }}%);">
+              {{ section.settings.badge_label | newline_to_br }}
+            </span>
+          </div>
+        {% endif %}
+        <div class="josh-img-view">
+          <img id="JoshMainImg-{{ section.id }}" src="{{ current_variant.featured_image | default: product.featured_image | img_url: '1400x' }}" class="josh-main-img" alt="{{ product.title }}">
+        </div>
+      </div>
+    </div>
+
+    <div class="josh-content-col">
+      <div class="josh-content-inner">
+        
+        <div class="josh-header-row">
+          <h1 class="josh-title">{{ product.title }}</h1>
+          <div class="josh-main-price cus_font_anton" id="JoshPrice-{{ section.id }}">{{ current_variant.price | money }}</div>
+        </div>
+
+        <div class="josh-trust-row">
+          <span class="trust-text cus_font_epilogue">TRUSTED BY {{ section.settings.customer_count }} CUSTOMERS</span>
+          <div class="stars-wrap">
+            <span class="stars-gold">★★★★★</span>
+            <span class="rev-count cus_font_epilogue">{{ section.settings.review_count }} Reviews</span>
+          </div>
+        </div>
+
+        <div class="josh-desc">{{ product.description | strip_html | truncatewords: 30 }}</div>
+
+        <div class="josh-meta-info">
+          {%- unless product.has_only_default_variant -%}
+            <div class="meta-row">
+              <strong style="padding-right: 7px;">SIZE</strong> 
+              <span id="SelectedSize-{{ section.id }}">
+                {%- for option in product.options_with_values -%}
+                  {%- assign option_name = option.name | downcase -%}
+                  {%- if option_name == 'size' -%}
+                    {{ current_variant.options[forloop.index0] }}
+                  {%- endif -%}
+                {%- endfor -%}
+              </span>
+            </div>
+          {%- endunless -%}
+          
+          {%- if product.metafields.custom.ingredients != blank -%}
+            <div class="meta-row">
+              <strong>INGREDIENTS</strong><br> 
+              <span>{{ product.metafields.custom.ingredients | newline_to_br }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="josh-slider-container">
+          {%- if img_count > 5 -%}
+          <button class="arrow-clean" onclick="scrollJoshThumb(-1, '{{ section.id }}')">
+            <svg width="52" height="52" viewBox="0 0 52 52"><rect width="52" height="52" rx="26" transform="matrix(-1 0 0 1 52 0)" fill="#AF1F5C"/><path d="M16.7 26l14.5 13.5 2-2L22.7 26l10.5-11.5-2-2L16.7 26z" fill="white"/></svg>
+          </button>
+          {%- endif -%}
+          
+          <div class="josh-thumb-viewport" id="ThumbWrapper-{{ section.id }}">
+            <div class="josh-thumb-track" style="{% if img_count <= 5 %} justify-content: flex-start; {% endif %}">
+              {% for variant in product.variants %}
+                {% if variant.featured_image != blank %}
+                  <div class="josh-thumb-item {% if variant.id == current_variant.id %}is-active{% endif %}" 
+                       onclick="switchJoshVariant('{{ variant.featured_image | img_url: '1400x' }}', '{{ variant.id }}', '{{ variant.price | money }}', this, '{{ section.id }}', '{{ variant.title }}')">
+                    <div class="thumb-img-box"><img src="{{ variant.featured_image | img_url: '300x' }}"></div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+          {%- if img_count > 5 -%}
+          <button class="arrow-clean" onclick="scrollJoshThumb(1, '{{ section.id }}')">
+            <svg width="52" height="52" viewBox="0 0 52 52"><rect width="52" height="52" rx="26" fill="#AF1F5C"/><path d="M35.3 26L20.8 12.5l-2 2L29.3 26l-10.5 11.5 2 2L35.3 26z" fill="white"/></svg>
+          </button>
+          {%- endif -%}
+        </div>
+
+        <div class="josh-footer-flex">
+          <div class="josh-qty-pill">
+            <button type="button" onclick="changeJoshQty(-1, '{{ section.id }}')">
+               <svg width="52" height="52" viewBox="0 0 52 52"><rect x="0.5" y="0.5" width="51" height="51" rx="25.5" fill="none" stroke="#2E1947"/><path d="M39 28.5H13V25.5H39V28.5Z" fill="#2E1947"/></svg>
+            </button>
+            <input type="number" id="JoshQtyInput-{{ section.id }}" value="1" min="1">
+            <button type="button" onclick="changeJoshQty(1, '{{ section.id }}')">
+               <svg width="52" height="52" viewBox="0 0 52 52"><rect width="52" height="52" rx="26" fill="#2E1947"/><path d="M27.5 16V26H37.5V29H27.5V39H24.5V39V29H14.5H13V26H14.5H24.5V16H27.5Z" fill="white"/></svg>
+            </button>
+          </div>
+          
+          <div style="flex:1; text-align:end; width: 100%;">
+             <a href="{{ product.url }}?variant={{ current_variant.id }}" 
+                id="JoshShopNow-{{ section.id }}" 
+                class="josh-shop-now cus_font_anton" 
+                style="display: block; text-decoration: none; text-align: center; line-height: 1.2; padding: 5px 0;">
+                SHOP NOW
+             </a>
+          </div>
+        </div>
+
+       </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<style>
+  p,div { font-family: 'Epilogue', sans-serif !important; }
+.josh-v5-wrapper {
+  width: 100%;
+  max-width: 100vw;
+  padding: 0 !important;
+  margin: 0;
+}
+.josh-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  min-height: 100vh;
+  gap: 0;
+}
+.josh-media-col {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+.is-sticky-on .josh-sticky-wrap {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+.josh-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  display: block;
+}
+.josh-content-col {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+  .josh-content-inner { padding: 60px 8%; width: 100%; max-width: 100%; }
+  .josh-badge-dynamic { position: absolute; z-index: 10; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .badge-bg-img { width: 100%; height: auto; }
+  .badge-text-figma { position: absolute; top: 50%; left: 50%; color: #FFF; text-align: center; white-space: nowrap; line-height: 0.95; text-shadow: 4px 4px 0 #B01F5D; -webkit-text-stroke: 1.5px #AF1F5C; font-family: 'Anton', sans-serif; text-transform: uppercase; }
+  .josh-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .josh-title { font-size: clamp(32px, 4vw, 48px); margin: 0; color: #2E1947; text-transform: uppercase; font-family: 'Anton', sans-serif; }
+  .josh-main-price { font-size: clamp(32px, 4vw, 48px); color: #2E1947; font-family: 'Anton', sans-serif; }
+  .josh-trust-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+  .trust-text { font-size: 16px; color: #2E1947; font-weight: 700; }
+  .stars-gold { color: #AF1F5C; font-size: 15px; }
+  .rev-count { font-size: 16px; color: #2E1947; margin-left: 5px; }
+  .josh-desc { font-size: 18px; color: #444; line-height: 1.5; margin-bottom: 25px; }
+  .josh-meta-info { margin-bottom: 25px; }
+  .meta-row { font-size: 16px; margin-bottom: 8px; color: #2E1947; }
+  .meta-row strong { font-weight: 800; text-transform: uppercase; }
+  .josh-slider-container { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+  .josh-thumb-viewport { flex: 1; overflow: hidden; }
+  .josh-thumb-track {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  align-items: center;
+}
+.josh-thumb-item {
+  flex: 0 0 18%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(0.85);
+}
+.josh-thumb-item.is-active {
+  opacity: 1;
+  transform: scale(1);
+  border: none !important;
+}
+.thumb-img-box {
+  border: none;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+}
+.thumb-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.josh-qty-pill input::-webkit-outer-spin-button,
+.josh-qty-pill input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.josh-qty-pill input[type=number] {
+  -moz-appearance: textfield;
+}
+  .arrow-clean { background: none; border: none; cursor: pointer; padding: 0; flex-shrink: 0; }
+  .arrow-clean svg { width: 40px; height: 40px; }
+  .josh-footer-flex { display: flex; gap: 15px; align-items: center; }
+  .josh-qty-pill { display: flex; align-items: center; gap: 10px; border-radius: 50px; padding: 5px 15px; }
+  .josh-qty-pill input { width: 30px; border: none; box-shadow: none; outline: none; text-align: center; font-size: 18px; font-weight: 700; background: transparent; }
+  .josh-qty-pill button { background: none; border: none; cursor: pointer; display: flex; padding: 0; }
+  .josh-qty-pill svg { width: 42px; height: 42px; }
+  .josh-shop-now { width: 100%; background: #AF1F5C; color: #fff; border: none; border-radius: 50px; font-size: clamp(24px, 3vw, 42px); cursor: pointer; text-transform: uppercase; font-family: 'Anton', sans-serif; transition: 0.3s opacity; }
+  .josh-shop-now:hover { opacity: 0.9; }
+
+  @media (max-width: 991px) {
+    .josh-grid-layout { grid-template-columns: 1fr; }
+    .is-sticky-on .josh-sticky-wrap { position: relative; height: auto; }
+    .josh-content-inner { padding: 40px 20px; }
+    .josh-badge-dynamic { left: 62% !important; }
+    .josh-header-row {
+      flex-direction: column;
+    }
+    .josh-trust-row {
+        flex-direction: column;
+    }
+    .josh-desc {
+        text-align: center;
+    }
+    .josh-thumb-item {
+        flex: 0 0 22%;
+    }
+    .josh-badge-dynamic {
+        z-index: 2;
+    }
+    .josh-footer-flex {
+        flex-direction: column;
+    }
+    .josh-shop-now {
+      min-width: unset !important; 
+      width: 100%;
+    }
+    .josh-qty-pill {
+        gap: 30px;
+    }
+  }
+  @media (max-height: 700px) {
+  .is-sticky-on .josh-sticky-wrap {
+    height: auto;
+    min-height: 500px;
+  }
+}
+</style>
+
+<script>
+function switchJoshVariant(url, variantId, price, el, sid, sizeName) {
+  document.getElementById('JoshMainImg-' + sid).src = url;
+  document.querySelector('#JoshPrice-' + sid).innerText = price;
+  
+  const sizeElement = document.getElementById('SelectedSize-' + sid);
+  if (sizeElement && sizeName) {
+    sizeElement.innerText = sizeName;
+  }
+  
+  // Update the Shop Now button link with the new variant ID
+  const shopNowBtn = document.getElementById('JoshShopNow-' + sid);
+  if(shopNowBtn) {
+     const baseUrl = "{{ product.url }}";
+     shopNowBtn.href = baseUrl + "?variant=" + variantId;
+  }
+
+  el.parentElement.querySelectorAll('.josh-thumb-item').forEach(i => i.classList.remove('is-active'));
+  el.classList.add('is-active');
+}
+
+function scrollJoshThumb(dir, sid) {
+  document.getElementById('ThumbWrapper-' + sid).scrollBy({ left: dir * 150, behavior: 'smooth' });
+}
+
+function changeJoshQty(v, sid) {
+  let i = document.getElementById('JoshQtyInput-' + sid);
+  let n = parseInt(i.value) + v;
+  if(n >= 1) { 
+    i.value = n; 
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Josh Dynamic Meta v2",
+  "settings": [
+    { "type": "product", "id": "featured_product", "label": "Select Product" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "label": "Top Padding", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom Padding", "min": 0, "max": 100, "default": 0 },
+    { "type": "checkbox", "id": "enable_sticky", "label": "Enable Sticky Image", "default": true },
+    { "type": "header", "content": "Badge Controls" },
+    { "type": "checkbox", "id": "show_badge", "label": "Show Badge", "default": true },
+    { "type": "image_picker", "id": "badge_shape", "label": "Badge Image" },
+    { "type": "range", "id": "badge_size", "label": "Badge Size", "min": 50, "max": 250, "step": 2, "default": 110 },
+    { "type": "select", "id": "v_pos", "label": "Vertical Anchor", "options": [{"value":"top","label":"Top"},{"value":"bottom","label":"Bottom"}], "default": "top" },
+    { "type": "range", "id": "badge_top", "label": "Top %", "min": 0, "max": 100, "default": 10 },
+    { "type": "range", "id": "badge_bottom", "label": "Bottom %", "min": 0, "max": 100, "default": 10 },
+    { "type": "select", "id": "h_pos", "label": "Horizontal Anchor", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}], "default": "right" },
+    { "type": "range", "id": "badge_left", "label": "Left %", "min": 0, "max": 100, "default": 10 },
+    { "type": "range", "id": "badge_right", "label": "Right %", "min": 0, "max": 100, "default": 10 },
+    { "type": "textarea", "id": "badge_label", "label": "Badge Text", "default": "JOSH'S\nSPECIAL" },
+    { "type": "range", "id": "badge_font_size", "label": "Font Size", "min": 10, "max": 60, "default": 24 },
+    { "type": "range", "id": "text_x_offset", "label": "Text X Offset", "min": -100, "max": 100, "step": 2, "default": -50 },
+    { "type": "range", "id": "text_y_offset", "label": "Text Y Offset", "min": -100, "max": 100, "step": 2, "default": -50 },
+    { "type": "header", "content": "Content Settings" },
+    { "type": "text", "id": "customer_count", "label": "Customers Count", "default": "60,000+" },
+    { "type": "text", "id": "review_count", "label": "Review Count", "default": "2908" }
+  ],
+  "presets": [{ "name": "Josh Dynamic Meta v2" }]
+}
+{% endschema %}

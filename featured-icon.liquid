@@ -1,0 +1,214 @@
+=========== lastlook store par use kiya gya ==============
+
+{%- style -%}
+  .ftd-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ftd-floating-icon {
+    position: absolute;
+    width: {{ section.settings.float_icon_width }}px;
+    z-index: 5;
+    top: {{ section.settings.float_top }}%;
+    left: {{ section.settings.float_left }}%;
+    transform: translate(-50%, -50%);
+  }
+
+  .ftd-features-wrapper {
+    max-width: 1360px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .ftd-feature-column {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ftd-feature-title { 
+    font-size: 40px;
+    margin-bottom: 20px; 
+    font-weight: 700; 
+    letter-spacing: 1px;
+    text-transform: uppercase; 
+    color: {{ section.settings.accent_color }};
+  }
+
+  .ftd-feature-icon-box {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .ftd-icon-img {
+    max-width: 140px;
+    height: auto;
+  }
+
+  .ftd-feature-desc { 
+    font-size: 15px; 
+    font-weight: 700;
+    line-height: 1.2; 
+    max-width: 320px;
+    margin: 0 auto;
+    color: #F6BDCC;
+  }
+
+  .ftd-main-btn {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 5px 20px;
+    background-color: {{ section.settings.btn_bg }};
+    color: {{ section.settings.btn_text }};
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 25px;
+    border: 3px solid #ffffff;
+    transition: all 0.3s ease;
+  }
+
+  .ftd-header-area {
+    margin-bottom: 15px;
+  }
+
+  .ftd-header-area h2 {
+    font-size: 48px;
+    font-weight: 600;
+    color: #F6BDCC;
+    margin-bottom: 15px;
+  }
+
+  .ftd-header-area p {
+    font-size: 45px;
+    color: #F6BDCC;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .ftd-features-wrapper { gap: 30px; }
+    .ftd-floating-icon { width: calc({{ section.settings.float_icon_width }}px * 0.7); }
+    .ftd-section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+     .ftd-header-area h2 {
+    font-size: 25px;
+  }
+  .ftd-header-area p {
+    font-size: 24px;
+  }
+  .ftd-floating-icon {
+    top: 2%;
+    left: 90%;
+  }
+  .ftd-header-area h2 {
+    margin-bottom: 5px;
+  }
+  .ftd-feature-title {
+    order: 2;
+    margin-bottom: 5px;
+  }
+  .ftd-feature-desc {
+    order: 3;
+  }
+  .ftd-main-btn {
+    margin-top: 25px;
+  }
+  }
+{%- endstyle -%}
+
+<section id="for_shop" class="ftd-section-{{ section.id }}">
+  {% if section.settings.floating_icon != blank %}
+    <img src="{{ section.settings.floating_icon | img_url: '200x' }}" 
+         class="ftd-floating-icon" 
+         alt="decorative-icon">
+  {% endif %}
+
+  <div class="ftd-header-area">
+    <h2>{{ section.settings.main_title }}</h2>
+    <p>{{ section.settings.sub_title }}</p>
+  </div>
+
+  <div class="ftd-features-wrapper">
+    {% for block in section.blocks %}
+      <div class="ftd-feature-column" {{ block.shopify_attributes }}>
+        <h3 class="ftd-feature-title">{{ block.settings.title }}</h3>
+        <div class="ftd-feature-icon-box">
+          {% if block.settings.icon_image != blank %}
+            <img src="{{ block.settings.icon_image | img_url: '400x' }}" class="ftd-icon-img" alt="{{ block.settings.title }}">
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'ftd-icon-img' }}
+          {% endif %}
+        </div>
+        <p class="ftd-feature-desc">{{ block.settings.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if section.settings.button_label != blank %}
+    <a href="{{ section.settings.button_link }}" class="ftd-main-btn">
+      {{ section.settings.button_label }}
+    </a>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "FTD Features Icons",
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Section Background", "default": "#3d1428" },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#ffffff" },
+    { "type": "color", "id": "accent_color", "label": "Feature Title Color", "default": "#f192b3" },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 200, "step": 4, "unit": "px", "label": "Padding Top", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "label": "Padding Bottom", "default": 80 },
+    {
+      "type": "header",
+      "content": "Floating Corner Icon"
+    },
+    { "type": "image_picker", "id": "floating_icon", "label": "Small Corner Icon" },
+    { "type": "range", "id": "float_icon_width", "min": 10, "max": 150, "step": 5, "unit": "px", "label": "Icon Size", "default": 50 },
+    { "type": "range", "id": "float_top", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position: Top to Bottom", "default": 10 },
+    { "type": "range", "id": "float_left", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Position: Left to Right", "default": 90 },
+    {
+      "type": "header",
+      "content": "Main Content"
+    },
+    { "type": "text", "id": "main_title", "label": "Main Heading", "default": "Warehouse Sales are great..." },
+    { "type": "textarea", "id": "sub_title", "label": "Sub Heading", "default": "That's where we come in." },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Unlock My Pass" },
+    { "type": "url", "id": "button_link", "label": "Button Link" },
+    { "type": "color", "id": "btn_bg", "label": "Button Background", "default": "#f192b3" },
+    { "type": "color", "id": "btn_text", "label": "Button Text", "default": "#3d1428" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Feature Title", "default": "LINES" },
+        { "type": "image_picker", "id": "icon_image", "label": "Feature Icon" },
+        { "type": "textarea", "id": "text", "label": "Feature Description", "default": "Skip the queues, early mornings and five-hour waits." }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "FTD Features Icons", "blocks": [ { "type": "feature" }, { "type": "feature" }, { "type": "feature" } ] }
+  ]
+}
+{% endschema %}

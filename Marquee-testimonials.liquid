@@ -1,0 +1,252 @@
+====== lastlook store par use kiya gya =============
+
+{%- style -%}
+  .marq-marquee-wrapper-{{ section.id }} {
+    background-color: #44172B;
+    padding: 50px 0;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Floating Corner Icon Logic */
+  .marq-floating-corner-icon {
+    position: absolute;
+    z-index: 10;
+    width: {{ section.settings.icon_size }}px;
+    height: auto;
+    top: {{ section.settings.icon_top }}%;
+    left: {{ section.settings.icon_left }}%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .marq-marquee-title {
+    color: #F88FAB;
+    text-align: center;
+    font-size: 45px;
+    margin-bottom: 40px;
+    font-weight: 600;
+  }
+
+  /* --- Seamless Slider Logic --- */
+  .marq-marquee-footer-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .marq-marquee-brands-footer {
+    display: flex;
+    gap: 40px;
+    width: max-content; 
+    align-items: center;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    animation: marq-marquee-infinite {{ section.settings.slider_speed }}s linear infinite;
+  }
+
+  @keyframes marq-marquee-infinite {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-25%, 0, 0); } 
+  }
+
+  /* Testimonial Card Styling */
+  .marq-testimonial-card {
+    flex-shrink: 0;
+    background-color: #ff8fb1;
+    border-radius: 12px;
+    width: 350px;
+    margin: 0 12px;
+    overflow: hidden;
+  }
+
+  .marq-card-header {
+    display: flex;
+    background-color: #F6BDCC;
+    border-bottom: 3px solid #000;
+    height: 55px;
+  }
+
+  .marq-header-left {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    border-right: 3px solid #000;
+  }
+
+  .marq-header-right-icon {
+    width: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F6BDCC;
+  }
+
+  .marq-user-name { font-weight: 700; color: #000; font-size: 30px; }
+  .marq-stars { color: #f1c40f; font-size: 1rem; letter-spacing: 1px; }
+  .marq-header-img { width: 35px; height: 35px; object-fit: contain; }
+
+  .marq-card-body {
+    padding: 25px 20px;
+    text-align: center;
+    white-space: normal;
+    min-height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F88FAB;
+  }
+
+  .marq-quote-text {
+    font-weight: 700;
+    color: #44172B;
+    font-size: 20px;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .marq-testimonial-card { width: 280px; margin: 0 8px; }
+    .marq-marquee-title { font-size: 30px; }
+    .marq-floating-corner-icon { top: 10%; left: 90%; }
+    .marq-header-left { gap: 15px; }
+    .marq-user-name { font-size: 25px; }
+    .marq-quote-text { font-size: 17px; }
+  }
+{%- endstyle -%}
+
+<section class="marq-marquee-wrapper-{{ section.id }}">
+  {% if section.settings.floating_icon != blank %}
+    <img src="{{ section.settings.floating_icon | image_url: width: 200 }}" 
+         class="marq-floating-corner-icon" 
+         alt="decoration icon">
+  {% endif %}
+
+  {% if section.settings.title != blank %}
+    <h2 class="marq-marquee-title">{{ section.settings.title }}</h2>
+  {% endif %}
+
+  <div class="marq-marquee-footer-wrapper">
+    <div class="marq-marquee-brands-footer">
+      
+      {% capture testimonial_set %}
+        {% for block in section.blocks %}
+          <div class="marq-testimonial-card" {{ block.shopify_attributes }}>
+            <div class="marq-card-header">
+              <div class="marq-header-left">
+                <span class="marq-user-name">{{ block.settings.name }}</span>
+                <span class="marq-stars">
+                    <svg width="138" height="27" viewBox="0 0 138 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.2784 0L16.2595 9.17512H25.9068L18.102 14.8456L21.0832 24.0208L13.2784 18.3502L5.47353 24.0208L8.45471 14.8456L0.649889 9.17512H10.2972L13.2784 0Z" fill="#FFD000"/>
+                    <path d="M41.2578 0L44.239 9.17512H53.8863L46.0815 14.8456L49.0627 24.0208L41.2578 18.3502L33.453 24.0208L36.4342 14.8456L28.6294 9.17512H38.2767L41.2578 0Z" fill="#FFD000"/>
+                    <path d="M69.2373 0L72.2185 9.17512H81.8658L74.061 14.8456L77.0422 24.0208L69.2373 18.3502L61.4325 24.0208L64.4137 14.8456L56.6089 9.17512H66.2562L69.2373 0Z" fill="#FFD000"/>
+                    <path d="M97.2163 0L100.198 9.17512H109.845L102.04 14.8456L105.021 24.0208L97.2163 18.3502L89.4115 24.0208L92.3927 14.8456L84.5879 9.17512H94.2352L97.2163 0Z" fill="#FFD000"/>
+                    <path d="M124.722 0L127.703 9.17512H137.35L129.545 14.8456L132.527 24.0208L124.722 18.3502L116.917 24.0208L119.898 14.8456L112.093 9.17512H121.741L124.722 0Z" fill="#FFD000"/>
+                    </svg>
+                </span>
+              </div>
+              <div class="marq-header-right-icon">
+                {% if block.settings.card_icon != blank %}
+                  <img src="{{ block.settings.card_icon | image_url: width: 100 }}" class="marq-header-img" alt="icon">
+                {% else %}
+                  <span style="font-size: 20px;">♾️</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="marq-card-body">
+              <p class="marq-quote-text">{{ block.settings.quote }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endcapture %}
+
+      {{ testimonial_set }}
+      {{ testimonial_set }}
+      {{ testimonial_set }}
+      {{ testimonial_set }}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Seamless Testimonial Loop",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Our Members Love LASTLOOK"
+    },
+    {
+      "type": "range",
+      "id": "slider_speed",
+      "min": 6,
+      "max": 100,
+      "step": 2,
+      "unit": "s",
+      "label": "Slider Speed (Higher is Slower)",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Floating Corner Icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "floating_icon",
+      "label": "Icon Image"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 20,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon Size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Position: Top to Bottom",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "icon_left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Position: Left to Right",
+      "default": 94
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Sarah" },
+        { "type": "image_picker", "id": "card_icon", "label": "Card Header Icon" },
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "90% off One Teaspoon!?" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seamless Testimonial Loop"
+    }
+  ]
+}
+{% endschema %}
